@@ -1,6 +1,10 @@
 from setuptools import *
 import numpy as np
 import os
+import glob
+depends_libs=glob.glob('/tmp/dcmtk-DCMTK-3.6.4/build/lib/*.so')
+print(depends_libs)
+
 with open("README.md", "r") as fh:
     long_description = fh.read()
 _dcm2png = Extension(name='pydcm2png/_dcm2png',
@@ -20,15 +24,16 @@ _dcm2png = Extension(name='pydcm2png/_dcm2png',
                                 'cmr','dcmdsig','dcmwlm','dcmqrdb','dcmpstat','dcmrt','dcmiod','dcmfg','dcmseg',
                                 'dcmtract','dcmpmap'],
                  library_dirs=[
-                               'pydcm2png/lib', 
+                     '/tmp/dcmtk-DCMTK-3.6.4/build/lib/',
                                '/usr/local/Cellar/gcc/7.3.0_1/lib/gcc/7',
                                '/usr/local/lib/python3.6/site-packages/numpy/lib/',
                                '/usr/local/lib',
                                '/usr/local/opt/',
                         '/usr/lib/x86_64-linux-gnu/','/home/imgserver/anaconda3/lib/'],
                  extra_compile_args=[  # The g++ (4.8) in Travis needs this
-        '-fPIC','-shared','-std=c++11','-g'
-    ]
+        '-shared','-std=c++11','-g'],
+                 depends=depends_libs,
+                 runtime_libraties_dirs=['/tmp/dcmtk-DCMTK-3.6.4/build/lib/'],
                  )
 
 setup(
@@ -47,5 +52,6 @@ setup(
     ext_modules=[_dcm2png],
     packages=['pydcm2png'],
     package_dir={'pydcm2png':'pydcm2png/'},
-    package_data={'pydcm2png':['_dcm2png.so']}
+    package_data={'pydcm2png':['_dcm2png.so']},
+    requries=['dcmtk'],
 )
