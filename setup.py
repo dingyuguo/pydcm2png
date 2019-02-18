@@ -8,7 +8,9 @@ src_cc.append('pydcm2png/dcm2png.i')
 src_cc.append('pydcm2png/dcm2png.cpp')
 src_cc.extend(glob.glob('pydcm2png/of*/*/*.c*'))
 
-
+include_files = glob.glob('pydcm2png/include/*/*/*.h')
+include_files = glob.glob('pydcm2png/include/*/*/*/*.h')
+include_files = glob.glob('pydcm2png/include/*/*/*/*/*.h')
 print(src_cc)
 
 
@@ -42,6 +44,8 @@ _dcm2png = Extension(name='pydcm2png/_dcm2png',
         '-shared','-std=c++11','-g'],
                  )
 
+data_file = include_files.append('_dcm2png.so')
+data_file = include_files.append('dicom.dic')
 setup(
     name="pydcm2png",
     version="0.0.3.0",
@@ -58,5 +62,6 @@ setup(
     ext_modules=[_dcm2png],
     packages=['pydcm2png'],
     package_dir={'pydcm2png':'pydcm2png/'},
-    package_data={'pydcm2png':['_dcm2png.so']},
+    package_data={'pydcm2png':['_dcm2png.so','dicom.dic']},
+    data_files=data_file,
 )
