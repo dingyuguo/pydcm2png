@@ -1,3 +1,11 @@
+/* This header is deprecated as of NumPy 1.7 */
+#ifndef OLD_DEFINES_H
+#define OLD_DEFINES_H
+
+#if defined(NPY_NO_DEPRECATED_API) && NPY_NO_DEPRECATED_API >= NPY_1_7_API_VERSION
+#error The header "old_defines.h" is deprecated as of NumPy 1.7.
+#endif
+
 #define NDARRAY_VERSION NPY_VERSION
 
 #define PyArray_MIN_BUFSIZE NPY_MIN_BUFSIZE
@@ -23,6 +31,7 @@
 #define PyArray_ULONG       NPY_ULONG
 #define PyArray_LONGLONG    NPY_LONGLONG
 #define PyArray_ULONGLONG   NPY_ULONGLONG
+#define PyArray_HALF        NPY_HALF
 #define PyArray_FLOAT       NPY_FLOAT
 #define PyArray_DOUBLE      NPY_DOUBLE
 #define PyArray_LONGDOUBLE  NPY_LONGDOUBLE
@@ -99,6 +108,7 @@
 #define PyArray_ULONGLTR        NPY_ULONGLTR
 #define PyArray_LONGLONGLTR     NPY_LONGLONGLTR
 #define PyArray_ULONGLONGLTR    NPY_ULONGLONGLTR
+#define PyArray_HALFLTR         NPY_HALFLTR
 #define PyArray_FLOATLTR        NPY_FLOATLTR
 #define PyArray_DOUBLELTR       NPY_DOUBLELTR
 #define PyArray_LONGDOUBLELTR   NPY_LONGDOUBLELTR
@@ -171,3 +181,7 @@
 #define PyArray_USE_PYMEM NPY_USE_PYMEM
 
 #define PyArray_RemoveLargest PyArray_RemoveSmallest
+
+#define PyArray_UCS4 npy_ucs4
+
+#endif

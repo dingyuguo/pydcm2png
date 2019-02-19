@@ -1,12 +1,14 @@
 #include "arrayobject.h"
 
+#ifndef PYPY_VERSION
 #ifndef REFCOUNT
 #  define REFCOUNT NPY_REFCOUNT
 #  define MAX_ELSIZE 16
 #endif
+#endif
 
 #define PyArray_UNSIGNED_TYPES
-#define PyArray_SBYTE PyArray_BYTE
+#define PyArray_SBYTE NPY_BYTE
 #define PyArray_CopyArray PyArray_CopyInto
 #define _PyArray_multiply_list PyArray_MultiplyIntList
 #define PyArray_ISSPACESAVER(m) NPY_FALSE

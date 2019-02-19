@@ -62,7 +62,7 @@ data_file = include_files.append('_dcm2png.so')
 data_file = include_files.append('dicom.dic')
 setup(
     name="pydcm2png",
-    version="0.0.4.0",
+    version="0.1.0.0",
     author="dingyuguo",
     author_email="dyg1993@foxmail.com",
     description="Get Device Independent Pixel Data From DICOM File",
@@ -75,4 +75,5 @@ setup(
     package_dir={'pydcm2png':'pydcm2png/'},
     package_data={'pydcm2png':['_dcm2png.so','dicom.dic']},
     data_files=data_file,
+    install_requires = ['numpy>=1.15.0'],
 )

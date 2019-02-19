@@ -5,11 +5,14 @@ _,p,_ = imp.find_module('pydcm2png')
 if os.path.isfile(p):
     p=''
 os.environ['DCMDICTPATH']=os.path.join(p,'dicom.dic')
-import dcm2png
+from .dcm2png import get_width
+from .dcm2png import get_height
+from .dcm2png import pixel_data
+
 def get_pixel_data(dcm_file):
-    width = dcm2png.get_width(dcm_file)
-    height = dcm2png.get_height(dcm_file)
-    dcm_vector = dcm2png.pixel_data(dcm_file,width*height)
+    width = get_width(dcm_file)
+    height = get_height(dcm_file)
+    dcm_vector = pixel_data(dcm_file,width*height)
     dcm_img = dcm_vector.reshape(height,width)
     return dcm_img
 
