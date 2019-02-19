@@ -1,5 +1,4 @@
 from setuptools import *
-import numpy as np
 import os
 import glob
 
