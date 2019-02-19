@@ -95,29 +95,6 @@ except __builtin__.Exception:
         pass
     _newclass = 0
 
-USE_LUT = _dcm2png.USE_LUT
-USW_WW_WC = _dcm2png.USW_WW_WC
-NO_WINDOWS = _dcm2png.NO_WINDOWS
-EFT_RawPNM = _dcm2png.EFT_RawPNM
-EFT_8bitPNM = _dcm2png.EFT_8bitPNM
-EFT_16bitPNM = _dcm2png.EFT_16bitPNM
-EFT_NbitPNM = _dcm2png.EFT_NbitPNM
-EFT_BMP = _dcm2png.EFT_BMP
-EFT_8bitBMP = _dcm2png.EFT_8bitBMP
-EFT_24bitBMP = _dcm2png.EFT_24bitBMP
-EFT_32bitBMP = _dcm2png.EFT_32bitBMP
-EFT_JPEG = _dcm2png.EFT_JPEG
-EFT_TIFF = _dcm2png.EFT_TIFF
-EFT_PNG = _dcm2png.EFT_PNG
-EFT_16bitPNG = _dcm2png.EFT_16bitPNG
-
-def get_file_without_extension(file_name):
-    return _dcm2png.get_file_without_extension(file_name)
-get_file_without_extension = _dcm2png.get_file_without_extension
-
-def input_file_dcm_to_png(dcm_file, png_file):
-    return _dcm2png.input_file_dcm_to_png(dcm_file, png_file)
-input_file_dcm_to_png = _dcm2png.input_file_dcm_to_png
 class DCMOP(_object):
     __swig_setmethods__ = {}
     __setattr__ = lambda self, name, value: _swig_setattr(self, DCMOP, name, value)
@@ -155,17 +132,8 @@ class DCMOP(_object):
     def get_window_type(self, window_cnt, voi_lut_cnt, no_window=False):
         return _dcm2png.DCMOP_get_window_type(self, window_cnt, voi_lut_cnt, no_window)
 
-    def to_string(self, i):
-        return _dcm2png.DCMOP_to_string(self, i)
-
-    def convert_to_image(self, output_file):
-        return _dcm2png.DCMOP_convert_to_image(self, output_file)
-
     def apply_normal_window(self):
         return _dcm2png.DCMOP_apply_normal_window(self)
-
-    def save_as_img(self, opt_ofname, opt_fileType=EFT_16bitPNG):
-        return _dcm2png.DCMOP_save_as_img(self, opt_ofname, opt_fileType)
 
     def get_pixel_data(self):
         return _dcm2png.DCMOP_get_pixel_data(self)

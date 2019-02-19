@@ -2,6 +2,8 @@ import os
 #os.environ['DCMDICTPATH']='/usr/local/share/dcmtk_old/dicom.dic'
 import imp
 _,p,_ = imp.find_module('pydcm2png')
+if os.path.isfile(p):
+    p=''
 os.environ['DCMDICTPATH']=os.path.join(p,'dicom.dic')
 import dcm2png
 def to_png(dcm_file):

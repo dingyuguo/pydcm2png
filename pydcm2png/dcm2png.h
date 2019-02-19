@@ -51,32 +51,7 @@
 #include "dcmtk/dcmjpls/djdecode.h"      /* for dcmjpls decoders */
 #endif
 
-#define USE_LUT 1
-#define USW_WW_WC 2
-#define NO_WINDOWS 0
 using namespace std;
-enum E_FileType
-{
-	EFT_RawPNM,
-	EFT_8bitPNM,
-	EFT_16bitPNM,
-	EFT_NbitPNM,
-	EFT_BMP,
-	EFT_8bitBMP,
-	EFT_24bitBMP,
-	EFT_32bitBMP,
-	EFT_JPEG,
-	EFT_TIFF,
-	EFT_PNG,
-	EFT_16bitPNG
-	#ifdef PASTEL_COLOR_OUTPUT
-	,EFT_PastelPNM
-	#endif	
-};
-
-char * get_file_without_extension(const char * file_name);
-
-extern int  input_file_dcm_to_png(const char * dcm_file,const char * png_file);
 
 class DCMOP{
 	public:
@@ -91,12 +66,8 @@ class DCMOP{
 	bool open(const char * file_name);
 	int get_window_type(unsigned long window_cnt,unsigned long voi_lut_cnt,bool no_window=false);
 
-		char * to_string(int i);
 
-		bool convert_to_image(string output_file);
 		bool apply_normal_window();
-		bool save_as_img(const char * opt_ofname,E_FileType opt_fileType = EFT_16bitPNG);/* default: 16-bit PGM/PPM */
-		//bool save_as_img(const char * opt_ofname,E_FileType opt_fileType = EFT_TIFF);/* default: 16-bit PGM/PPM */
 		void * get_pixel_data();
 		unsigned long width;
 		unsigned long height;

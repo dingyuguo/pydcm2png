@@ -3008,11 +3008,10 @@ SWIG_Python_NonDynamicSetAttr(PyObject *obj, PyObject *name, PyObject *value) {
 #define SWIGTYPE_p_OFCmdFloat swig_types[2]
 #define SWIGTYPE_p_OFCmdUnsignedInt swig_types[3]
 #define SWIGTYPE_p_char swig_types[4]
-#define SWIGTYPE_p_string swig_types[5]
-#define SWIGTYPE_p_unsigned_short swig_types[6]
-#define SWIGTYPE_p_void swig_types[7]
-static swig_type_info *swig_types[9];
-static swig_module_info swig_module = {swig_types, 8, 0, 0, 0, 0};
+#define SWIGTYPE_p_unsigned_short swig_types[5]
+#define SWIGTYPE_p_void swig_types[6]
+static swig_type_info *swig_types[8];
+static swig_module_info swig_module = {swig_types, 7, 0, 0, 0, 0};
 #define SWIG_TypeQuery(name) SWIG_TypeQueryModule(&swig_module, &swig_module, name)
 #define SWIG_MangledTypeQuery(name) SWIG_MangledTypeQueryModule(&swig_module, &swig_module, name)
 
@@ -3119,7 +3118,6 @@ namespace swig {
 
     #define SWIG_FILE_WITH_INIT
     #include"dcm2png.h"
-    extern int  input_file_dcm_to_png(const char * dcm_file,const char * png_file);
     extern unsigned int get_width(const char * dcm_file);
     extern unsigned int get_height(const char * dcm_file);
 
@@ -3133,13 +3131,6 @@ namespace swig {
 
 
 #include <complex> 
-
-
-SWIGINTERNINLINE PyObject*
-  SWIG_From_int  (int value)
-{
-  return PyInt_FromLong((long) value);
-}
 
 
 SWIGINTERN swig_type_info*
@@ -3269,42 +3260,6 @@ SWIG_AsCharPtrAndSize(PyObject *obj, char** cptr, size_t* psize, int *alloc)
 
 
 
-
-
-SWIGINTERNINLINE PyObject *
-SWIG_FromCharPtrAndSize(const char* carray, size_t size)
-{
-  if (carray) {
-    if (size > INT_MAX) {
-      swig_type_info* pchar_descriptor = SWIG_pchar_descriptor();
-      return pchar_descriptor ? 
-	SWIG_InternalNewPointerObj(const_cast< char * >(carray), pchar_descriptor, 0) : SWIG_Py_Void();
-    } else {
-#if PY_VERSION_HEX >= 0x03000000
-#if defined(SWIG_PYTHON_STRICT_BYTE_CHAR)
-      return PyBytes_FromStringAndSize(carray, static_cast< Py_ssize_t >(size));
-#else
-#if PY_VERSION_HEX >= 0x03010000
-      return PyUnicode_DecodeUTF8(carray, static_cast< Py_ssize_t >(size), "surrogateescape");
-#else
-      return PyUnicode_FromStringAndSize(carray, static_cast< Py_ssize_t >(size));
-#endif
-#endif
-#else
-      return PyString_FromStringAndSize(carray, static_cast< Py_ssize_t >(size));
-#endif
-    }
-  } else {
-    return SWIG_Py_Void();
-  }
-}
-
-
-SWIGINTERNINLINE PyObject * 
-SWIG_FromCharPtr(const char *cptr)
-{ 
-  return SWIG_FromCharPtrAndSize(cptr, (cptr ? strlen(cptr) : 0));
-}
 
 
 SWIGINTERNINLINE PyObject*
@@ -3524,6 +3479,13 @@ SWIG_AsVal_bool (PyObject *obj, bool *val)
     return SWIG_ERROR;
   if (val) *val = r ? true : false;
   return SWIG_OK;
+}
+
+
+SWIGINTERNINLINE PyObject*
+  SWIG_From_int  (int value)
+{
+  return PyInt_FromLong((long) value);
 }
 
 
@@ -4019,68 +3981,6 @@ SWIGINTERNINLINE PyObject*
 #ifdef __cplusplus
 extern "C" {
 #endif
-SWIGINTERN PyObject *_wrap_get_file_without_extension(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  char *arg1 = (char *) 0 ;
-  int res1 ;
-  char *buf1 = 0 ;
-  int alloc1 = 0 ;
-  PyObject * obj0 = 0 ;
-  char *result = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"O:get_file_without_extension",&obj0)) SWIG_fail;
-  res1 = SWIG_AsCharPtrAndSize(obj0, &buf1, NULL, &alloc1);
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "get_file_without_extension" "', argument " "1"" of type '" "char const *""'");
-  }
-  arg1 = reinterpret_cast< char * >(buf1);
-  result = (char *)get_file_without_extension((char const *)arg1);
-  resultobj = SWIG_FromCharPtr((const char *)result);
-  if (alloc1 == SWIG_NEWOBJ) delete[] buf1;
-  return resultobj;
-fail:
-  if (alloc1 == SWIG_NEWOBJ) delete[] buf1;
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_input_file_dcm_to_png(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  char *arg1 = (char *) 0 ;
-  char *arg2 = (char *) 0 ;
-  int res1 ;
-  char *buf1 = 0 ;
-  int alloc1 = 0 ;
-  int res2 ;
-  char *buf2 = 0 ;
-  int alloc2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  int result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:input_file_dcm_to_png",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_AsCharPtrAndSize(obj0, &buf1, NULL, &alloc1);
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "input_file_dcm_to_png" "', argument " "1"" of type '" "char const *""'");
-  }
-  arg1 = reinterpret_cast< char * >(buf1);
-  res2 = SWIG_AsCharPtrAndSize(obj1, &buf2, NULL, &alloc2);
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "input_file_dcm_to_png" "', argument " "2"" of type '" "char const *""'");
-  }
-  arg2 = reinterpret_cast< char * >(buf2);
-  result = (int)input_file_dcm_to_png((char const *)arg1,(char const *)arg2);
-  resultobj = SWIG_From_int(static_cast< int >(result));
-  if (alloc1 == SWIG_NEWOBJ) delete[] buf1;
-  if (alloc2 == SWIG_NEWOBJ) delete[] buf2;
-  return resultobj;
-fail:
-  if (alloc1 == SWIG_NEWOBJ) delete[] buf1;
-  if (alloc2 == SWIG_NEWOBJ) delete[] buf2;
-  return NULL;
-}
-
-
 SWIGINTERN PyObject *_wrap_new_DCMOP__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   DCMOP *result = 0 ;
@@ -4834,76 +4734,6 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_DCMOP_to_string(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  DCMOP *arg1 = (DCMOP *) 0 ;
-  int arg2 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  int val2 ;
-  int ecode2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  char *result = 0 ;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:DCMOP_to_string",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_DCMOP, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "DCMOP_to_string" "', argument " "1"" of type '" "DCMOP *""'"); 
-  }
-  arg1 = reinterpret_cast< DCMOP * >(argp1);
-  ecode2 = SWIG_AsVal_int(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "DCMOP_to_string" "', argument " "2"" of type '" "int""'");
-  } 
-  arg2 = static_cast< int >(val2);
-  result = (char *)(arg1)->to_string(arg2);
-  resultobj = SWIG_FromCharPtr((const char *)result);
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_DCMOP_convert_to_image(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  DCMOP *arg1 = (DCMOP *) 0 ;
-  string arg2 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  void *argp2 ;
-  int res2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  bool result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:DCMOP_convert_to_image",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_DCMOP, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "DCMOP_convert_to_image" "', argument " "1"" of type '" "DCMOP *""'"); 
-  }
-  arg1 = reinterpret_cast< DCMOP * >(argp1);
-  {
-    res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_string,  0  | 0);
-    if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "DCMOP_convert_to_image" "', argument " "2"" of type '" "string""'"); 
-    }  
-    if (!argp2) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "DCMOP_convert_to_image" "', argument " "2"" of type '" "string""'");
-    } else {
-      string * temp = reinterpret_cast< string * >(argp2);
-      arg2 = *temp;
-      if (SWIG_IsNewObj(res2)) delete temp;
-    }
-  }
-  result = (bool)(arg1)->convert_to_image(arg2);
-  resultobj = SWIG_From_bool(static_cast< bool >(result));
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
 SWIGINTERN PyObject *_wrap_DCMOP_apply_normal_window(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   DCMOP *arg1 = (DCMOP *) 0 ;
@@ -4923,137 +4753,6 @@ SWIGINTERN PyObject *_wrap_DCMOP_apply_normal_window(PyObject *SWIGUNUSEDPARM(se
   return resultobj;
 fail:
   return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_DCMOP_save_as_img__SWIG_0(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  DCMOP *arg1 = (DCMOP *) 0 ;
-  char *arg2 = (char *) 0 ;
-  E_FileType arg3 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  int res2 ;
-  char *buf2 = 0 ;
-  int alloc2 = 0 ;
-  int val3 ;
-  int ecode3 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  PyObject * obj2 = 0 ;
-  bool result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OOO:DCMOP_save_as_img",&obj0,&obj1,&obj2)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_DCMOP, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "DCMOP_save_as_img" "', argument " "1"" of type '" "DCMOP *""'"); 
-  }
-  arg1 = reinterpret_cast< DCMOP * >(argp1);
-  res2 = SWIG_AsCharPtrAndSize(obj1, &buf2, NULL, &alloc2);
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "DCMOP_save_as_img" "', argument " "2"" of type '" "char const *""'");
-  }
-  arg2 = reinterpret_cast< char * >(buf2);
-  ecode3 = SWIG_AsVal_int(obj2, &val3);
-  if (!SWIG_IsOK(ecode3)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "DCMOP_save_as_img" "', argument " "3"" of type '" "E_FileType""'");
-  } 
-  arg3 = static_cast< E_FileType >(val3);
-  result = (bool)(arg1)->save_as_img((char const *)arg2,arg3);
-  resultobj = SWIG_From_bool(static_cast< bool >(result));
-  if (alloc2 == SWIG_NEWOBJ) delete[] buf2;
-  return resultobj;
-fail:
-  if (alloc2 == SWIG_NEWOBJ) delete[] buf2;
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_DCMOP_save_as_img__SWIG_1(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  DCMOP *arg1 = (DCMOP *) 0 ;
-  char *arg2 = (char *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  int res2 ;
-  char *buf2 = 0 ;
-  int alloc2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  bool result;
-  
-  if (!PyArg_ParseTuple(args,(char *)"OO:DCMOP_save_as_img",&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_DCMOP, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "DCMOP_save_as_img" "', argument " "1"" of type '" "DCMOP *""'"); 
-  }
-  arg1 = reinterpret_cast< DCMOP * >(argp1);
-  res2 = SWIG_AsCharPtrAndSize(obj1, &buf2, NULL, &alloc2);
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "DCMOP_save_as_img" "', argument " "2"" of type '" "char const *""'");
-  }
-  arg2 = reinterpret_cast< char * >(buf2);
-  result = (bool)(arg1)->save_as_img((char const *)arg2);
-  resultobj = SWIG_From_bool(static_cast< bool >(result));
-  if (alloc2 == SWIG_NEWOBJ) delete[] buf2;
-  return resultobj;
-fail:
-  if (alloc2 == SWIG_NEWOBJ) delete[] buf2;
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_DCMOP_save_as_img(PyObject *self, PyObject *args) {
-  Py_ssize_t argc;
-  PyObject *argv[4] = {
-    0
-  };
-  Py_ssize_t ii;
-  
-  if (!PyTuple_Check(args)) SWIG_fail;
-  argc = args ? PyObject_Length(args) : 0;
-  for (ii = 0; (ii < 3) && (ii < argc); ii++) {
-    argv[ii] = PyTuple_GET_ITEM(args,ii);
-  }
-  if (argc == 2) {
-    int _v;
-    void *vptr = 0;
-    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_DCMOP, 0);
-    _v = SWIG_CheckState(res);
-    if (_v) {
-      int res = SWIG_AsCharPtrAndSize(argv[1], 0, NULL, 0);
-      _v = SWIG_CheckState(res);
-      if (_v) {
-        return _wrap_DCMOP_save_as_img__SWIG_1(self, args);
-      }
-    }
-  }
-  if (argc == 3) {
-    int _v;
-    void *vptr = 0;
-    int res = SWIG_ConvertPtr(argv[0], &vptr, SWIGTYPE_p_DCMOP, 0);
-    _v = SWIG_CheckState(res);
-    if (_v) {
-      int res = SWIG_AsCharPtrAndSize(argv[1], 0, NULL, 0);
-      _v = SWIG_CheckState(res);
-      if (_v) {
-        {
-          int res = SWIG_AsVal_int(argv[2], NULL);
-          _v = SWIG_CheckState(res);
-        }
-        if (_v) {
-          return _wrap_DCMOP_save_as_img__SWIG_0(self, args);
-        }
-      }
-    }
-  }
-  
-fail:
-  SWIG_SetErrorMsg(PyExc_NotImplementedError,"Wrong number or type of arguments for overloaded function 'DCMOP_save_as_img'.\n"
-    "  Possible C/C++ prototypes are:\n"
-    "    DCMOP::save_as_img(char const *,E_FileType)\n"
-    "    DCMOP::save_as_img(char const *)\n");
-  return 0;
 }
 
 
@@ -5363,8 +5062,6 @@ fail:
 
 static PyMethodDef SwigMethods[] = {
 	 { (char *)"SWIG_PyInstanceMethod_New", (PyCFunction)SWIG_PyInstanceMethod_New, METH_O, NULL},
-	 { (char *)"get_file_without_extension", _wrap_get_file_without_extension, METH_VARARGS, NULL},
-	 { (char *)"input_file_dcm_to_png", _wrap_input_file_dcm_to_png, METH_VARARGS, NULL},
 	 { (char *)"new_DCMOP", _wrap_new_DCMOP, METH_VARARGS, NULL},
 	 { (char *)"delete_DCMOP", _wrap_delete_DCMOP, METH_VARARGS, NULL},
 	 { (char *)"DCMOP_to_DicomImage", _wrap_DCMOP_to_DicomImage, METH_VARARGS, NULL},
@@ -5374,10 +5071,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"DCMOP_dump_voi_LUT", _wrap_DCMOP_dump_voi_LUT, METH_VARARGS, NULL},
 	 { (char *)"DCMOP_open", _wrap_DCMOP_open, METH_VARARGS, NULL},
 	 { (char *)"DCMOP_get_window_type", _wrap_DCMOP_get_window_type, METH_VARARGS, NULL},
-	 { (char *)"DCMOP_to_string", _wrap_DCMOP_to_string, METH_VARARGS, NULL},
-	 { (char *)"DCMOP_convert_to_image", _wrap_DCMOP_convert_to_image, METH_VARARGS, NULL},
 	 { (char *)"DCMOP_apply_normal_window", _wrap_DCMOP_apply_normal_window, METH_VARARGS, NULL},
-	 { (char *)"DCMOP_save_as_img", _wrap_DCMOP_save_as_img, METH_VARARGS, NULL},
 	 { (char *)"DCMOP_get_pixel_data", _wrap_DCMOP_get_pixel_data, METH_VARARGS, NULL},
 	 { (char *)"DCMOP_width_set", _wrap_DCMOP_width_set, METH_VARARGS, NULL},
 	 { (char *)"DCMOP_width_get", _wrap_DCMOP_width_get, METH_VARARGS, NULL},
@@ -5401,7 +5095,6 @@ static swig_type_info _swigt__p_E_TransferSyntax = {"_p_E_TransferSyntax", "E_Tr
 static swig_type_info _swigt__p_OFCmdFloat = {"_p_OFCmdFloat", "OFCmdFloat *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_OFCmdUnsignedInt = {"_p_OFCmdUnsignedInt", "OFCmdUnsignedInt *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_char = {"_p_char", "char *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_string = {"_p_string", "string *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_unsigned_short = {"_p_unsigned_short", "unsigned short *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_void = {"_p_void", "void *", 0, 0, (void*)0, 0};
 
@@ -5411,7 +5104,6 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_OFCmdFloat,
   &_swigt__p_OFCmdUnsignedInt,
   &_swigt__p_char,
-  &_swigt__p_string,
   &_swigt__p_unsigned_short,
   &_swigt__p_void,
 };
@@ -5421,7 +5113,6 @@ static swig_cast_info _swigc__p_E_TransferSyntax[] = {  {&_swigt__p_E_TransferSy
 static swig_cast_info _swigc__p_OFCmdFloat[] = {  {&_swigt__p_OFCmdFloat, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_OFCmdUnsignedInt[] = {  {&_swigt__p_OFCmdUnsignedInt, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_char[] = {  {&_swigt__p_char, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_string[] = {  {&_swigt__p_string, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_unsigned_short[] = {  {&_swigt__p_unsigned_short, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_void[] = {  {&_swigt__p_void, 0, 0, 0},{0, 0, 0, 0}};
 
@@ -5431,7 +5122,6 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_OFCmdFloat,
   _swigc__p_OFCmdUnsignedInt,
   _swigc__p_char,
-  _swigc__p_string,
   _swigc__p_unsigned_short,
   _swigc__p_void,
 };
@@ -6127,21 +5817,6 @@ SWIG_init(void) {
   
   import_array();
   
-  SWIG_Python_SetConstant(d, "USE_LUT",SWIG_From_int(static_cast< int >(1)));
-  SWIG_Python_SetConstant(d, "USW_WW_WC",SWIG_From_int(static_cast< int >(2)));
-  SWIG_Python_SetConstant(d, "NO_WINDOWS",SWIG_From_int(static_cast< int >(0)));
-  SWIG_Python_SetConstant(d, "EFT_RawPNM",SWIG_From_int(static_cast< int >(EFT_RawPNM)));
-  SWIG_Python_SetConstant(d, "EFT_8bitPNM",SWIG_From_int(static_cast< int >(EFT_8bitPNM)));
-  SWIG_Python_SetConstant(d, "EFT_16bitPNM",SWIG_From_int(static_cast< int >(EFT_16bitPNM)));
-  SWIG_Python_SetConstant(d, "EFT_NbitPNM",SWIG_From_int(static_cast< int >(EFT_NbitPNM)));
-  SWIG_Python_SetConstant(d, "EFT_BMP",SWIG_From_int(static_cast< int >(EFT_BMP)));
-  SWIG_Python_SetConstant(d, "EFT_8bitBMP",SWIG_From_int(static_cast< int >(EFT_8bitBMP)));
-  SWIG_Python_SetConstant(d, "EFT_24bitBMP",SWIG_From_int(static_cast< int >(EFT_24bitBMP)));
-  SWIG_Python_SetConstant(d, "EFT_32bitBMP",SWIG_From_int(static_cast< int >(EFT_32bitBMP)));
-  SWIG_Python_SetConstant(d, "EFT_JPEG",SWIG_From_int(static_cast< int >(EFT_JPEG)));
-  SWIG_Python_SetConstant(d, "EFT_TIFF",SWIG_From_int(static_cast< int >(EFT_TIFF)));
-  SWIG_Python_SetConstant(d, "EFT_PNG",SWIG_From_int(static_cast< int >(EFT_PNG)));
-  SWIG_Python_SetConstant(d, "EFT_16bitPNG",SWIG_From_int(static_cast< int >(EFT_16bitPNG)));
 #if PY_VERSION_HEX >= 0x03000000
   return m;
 #else

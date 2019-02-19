@@ -48,7 +48,7 @@ data_file = include_files.append('_dcm2png.so')
 data_file = include_files.append('dicom.dic')
 setup(
     name="pydcm2png",
-    version="0.0.3.0",
+    version="0.0.3.2",
     author="dingyuguo",
     author_email="dyg1993@foxmail.com",
     description="Convert DICOM file to PNG file",
