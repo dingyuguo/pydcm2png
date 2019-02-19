@@ -1,193 +1,15 @@
 #ifndef _NPY_COMMON_H_
 #define _NPY_COMMON_H_
 
-/* numpconfig.h is auto-generated */
+/* This is auto-generated */
 #include "numpyconfig.h"
-#ifdef HAVE_NPY_CONFIG_H
-#include <npy_config.h>
-#endif
-
-/* need Python.h for npy_intp, npy_uintp */
-#include <Python.h>
-
-/*
- * using static inline modifiers when defining npy_math functions
- * allows the compiler to make optimizations when possible
- */
-#if defined(NPY_INTERNAL_BUILD) && NPY_INTERNAL_BUILD
-#ifndef NPY_INLINE_MATH
-#define NPY_INLINE_MATH 1
-#endif
-#endif
-
-/*
- * gcc does not unroll even with -O3
- * use with care, unrolling on modern cpus rarely speeds things up
- */
-#ifdef HAVE_ATTRIBUTE_OPTIMIZE_UNROLL_LOOPS
-#define NPY_GCC_UNROLL_LOOPS \
-    __attribute__((optimize("unroll-loops")))
-#else
-#define NPY_GCC_UNROLL_LOOPS
-#endif
-
-/* highest gcc optimization level, enabled autovectorizer */
-#ifdef HAVE_ATTRIBUTE_OPTIMIZE_OPT_3
-#define NPY_GCC_OPT_3 __attribute__((optimize("O3")))
-#else
-#define NPY_GCC_OPT_3
-#endif
-
-/* compile target attributes */
-#if defined HAVE_ATTRIBUTE_TARGET_AVX && defined HAVE_LINK_AVX
-#define NPY_GCC_TARGET_AVX __attribute__((target("avx")))
-#else
-#define NPY_GCC_TARGET_AVX
-#endif
-#if defined HAVE_ATTRIBUTE_TARGET_AVX2 && defined HAVE_LINK_AVX2
-#define NPY_GCC_TARGET_AVX2 __attribute__((target("avx2")))
-#else
-#define NPY_GCC_TARGET_AVX2
-#endif
-
-/*
- * mark an argument (starting from 1) that must not be NULL and is not checked
- * DO NOT USE IF FUNCTION CHECKS FOR NULL!! the compiler will remove the check
- */
-#ifdef HAVE_ATTRIBUTE_NONNULL
-#define NPY_GCC_NONNULL(n) __attribute__((nonnull(n)))
-#else
-#define NPY_GCC_NONNULL(n)
-#endif
-
-#if defined HAVE_XMMINTRIN_H && defined HAVE__MM_LOAD_PS
-#define NPY_HAVE_SSE_INTRINSICS
-#endif
-
-#if defined HAVE_EMMINTRIN_H && defined HAVE__MM_LOAD_PD
-#define NPY_HAVE_SSE2_INTRINSICS
-#endif
-
-/*
- * give a hint to the compiler which branch is more likely or unlikely
- * to occur, e.g. rare error cases:
- *
- * if (NPY_UNLIKELY(failure == 0))
- *    return NULL;
- *
- * the double !! is to cast the expression (e.g. NULL) to a boolean required by
- * the intrinsic
- */
-#ifdef HAVE___BUILTIN_EXPECT
-#define NPY_LIKELY(x) __builtin_expect(!!(x), 1)
-#define NPY_UNLIKELY(x) __builtin_expect(!!(x), 0)
-#else
-#define NPY_LIKELY(x) (x)
-#define NPY_UNLIKELY(x) (x)
-#endif
-
-#ifdef HAVE___BUILTIN_PREFETCH
-/* unlike _mm_prefetch also works on non-x86 */
-#define NPY_PREFETCH(x, rw, loc) __builtin_prefetch((x), (rw), (loc))
-#else
-#ifdef HAVE__MM_PREFETCH
-/* _MM_HINT_ET[01] (rw = 1) unsupported, only available in gcc >= 4.9 */
-#define NPY_PREFETCH(x, rw, loc) _mm_prefetch((x), loc == 0 ? _MM_HINT_NTA : \
-                                             (loc == 1 ? _MM_HINT_T2 : \
-                                              (loc == 2 ? _MM_HINT_T1 : \
-                                               (loc == 3 ? _MM_HINT_T0 : -1))))
-#else
-#define NPY_PREFETCH(x, rw,loc)
-#endif
-#endif
 
 #if defined(_MSC_VER)
         #define NPY_INLINE __inline
 #elif defined(__GNUC__)
-    #if defined(__STRICT_ANSI__)
-         #define NPY_INLINE __inline__
-    #else
-         #define NPY_INLINE inline
-    #endif
+        #define NPY_INLINE inline
 #else
-    #define NPY_INLINE
-#endif
-
-#ifdef HAVE___THREAD
-    #define NPY_TLS __thread
-#else
-    #ifdef HAVE___DECLSPEC_THREAD_
-        #define NPY_TLS __declspec(thread)
-    #else
-        #define NPY_TLS
-    #endif
-#endif
-
-#ifdef WITH_CPYCHECKER_RETURNS_BORROWED_REF_ATTRIBUTE
-  #define NPY_RETURNS_BORROWED_REF \
-    __attribute__((cpychecker_returns_borrowed_ref))
-#else
-  #define NPY_RETURNS_BORROWED_REF
-#endif
-
-#ifdef WITH_CPYCHECKER_STEALS_REFERENCE_TO_ARG_ATTRIBUTE
-  #define NPY_STEALS_REF_TO_ARG(n) \
-   __attribute__((cpychecker_steals_reference_to_arg(n)))
-#else
- #define NPY_STEALS_REF_TO_ARG(n)
-#endif
-
-/* 64 bit file position support, also on win-amd64. Ticket #1660 */
-#if defined(_MSC_VER) && defined(_WIN64) && (_MSC_VER > 1400) || \
-    defined(__MINGW32__) || defined(__MINGW64__)
-    #include <io.h>
-
-/* mingw based on 3.4.5 has lseek but not ftell/fseek */
-#if defined(__MINGW32__) || defined(__MINGW64__)
-extern int __cdecl _fseeki64(FILE *, long long, int);
-extern long long __cdecl _ftelli64(FILE *);
-#endif
-
-    #define npy_fseek _fseeki64
-    #define npy_ftell _ftelli64
-    #define npy_lseek _lseeki64
-    #define npy_off_t npy_int64
-
-    #if NPY_SIZEOF_INT == 8
-        #define NPY_OFF_T_PYFMT "i"
-    #elif NPY_SIZEOF_LONG == 8
-        #define NPY_OFF_T_PYFMT "l"
-    #elif NPY_SIZEOF_LONGLONG == 8
-        #define NPY_OFF_T_PYFMT "L"
-    #else
-        #error Unsupported size for type off_t
-    #endif
-#else
-#ifdef HAVE_FSEEKO
-    #define npy_fseek fseeko
-#else
-    #define npy_fseek fseek
-#endif
-#ifdef HAVE_FTELLO
-    #define npy_ftell ftello
-#else
-    #define npy_ftell ftell
-#endif
-    #include <sys/types.h>
-    #define npy_lseek lseek
-    #define npy_off_t off_t
-
-    #if NPY_SIZEOF_OFF_T == NPY_SIZEOF_SHORT
-        #define NPY_OFF_T_PYFMT "h"
-    #elif NPY_SIZEOF_OFF_T == NPY_SIZEOF_INT
-        #define NPY_OFF_T_PYFMT "i"
-    #elif NPY_SIZEOF_OFF_T == NPY_SIZEOF_LONG
-        #define NPY_OFF_T_PYFMT "l"
-    #elif NPY_SIZEOF_OFF_T == NPY_SIZEOF_LONGLONG
-        #define NPY_OFF_T_PYFMT "L"
-    #else
-        #error Unsupported size for type off_t
-    #endif
+        #define NPY_INLINE
 #endif
 
 /* enums for detected endianness */
@@ -197,87 +19,10 @@ enum {
         NPY_CPU_BIG
 };
 
-/*
- * This is to typedef npy_intp to the appropriate pointer size for this
- * platform.  Py_intptr_t, Py_uintptr_t are defined in pyport.h.
- */
-typedef Py_intptr_t npy_intp;
-typedef Py_uintptr_t npy_uintp;
+/* Some platforms don't define bool, long long, or long double.
+   Handle that here.
+*/
 
-/*
- * Define sizes that were not defined in numpyconfig.h.
- */
-#define NPY_SIZEOF_CHAR 1
-#define NPY_SIZEOF_BYTE 1
-#define NPY_SIZEOF_DATETIME 8
-#define NPY_SIZEOF_TIMEDELTA 8
-#define NPY_SIZEOF_INTP NPY_SIZEOF_PY_INTPTR_T
-#define NPY_SIZEOF_UINTP NPY_SIZEOF_PY_INTPTR_T
-#define NPY_SIZEOF_HALF 2
-#define NPY_SIZEOF_CFLOAT NPY_SIZEOF_COMPLEX_FLOAT
-#define NPY_SIZEOF_CDOUBLE NPY_SIZEOF_COMPLEX_DOUBLE
-#define NPY_SIZEOF_CLONGDOUBLE NPY_SIZEOF_COMPLEX_LONGDOUBLE
-
-#ifdef constchar
-#undef constchar
-#endif
-
-#define NPY_SSIZE_T_PYFMT "n"
-#define constchar char
-
-/* NPY_INTP_FMT Note:
- *      Unlike the other NPY_*_FMT macros which are used with
- *      PyOS_snprintf, NPY_INTP_FMT is used with PyErr_Format and
- *      PyString_Format. These functions use different formatting
- *      codes which are portably specified according to the Python
- *      documentation. See ticket #1795.
- */
-#if NPY_SIZEOF_PY_INTPTR_T == NPY_SIZEOF_INT
-        #define NPY_INTP NPY_INT
-        #define NPY_UINTP NPY_UINT
-        #define PyIntpArrType_Type PyIntArrType_Type
-        #define PyUIntpArrType_Type PyUIntArrType_Type
-        #define NPY_MAX_INTP NPY_MAX_INT
-        #define NPY_MIN_INTP NPY_MIN_INT
-        #define NPY_MAX_UINTP NPY_MAX_UINT
-        #define NPY_INTP_FMT "d"
-#elif NPY_SIZEOF_PY_INTPTR_T == NPY_SIZEOF_LONG
-        #define NPY_INTP NPY_LONG
-        #define NPY_UINTP NPY_ULONG
-        #define PyIntpArrType_Type PyLongArrType_Type
-        #define PyUIntpArrType_Type PyULongArrType_Type
-        #define NPY_MAX_INTP NPY_MAX_LONG
-        #define NPY_MIN_INTP NPY_MIN_LONG
-        #define NPY_MAX_UINTP NPY_MAX_ULONG
-        #define NPY_INTP_FMT "ld"
-#elif defined(PY_LONG_LONG) && (NPY_SIZEOF_PY_INTPTR_T == NPY_SIZEOF_LONGLONG)
-        #define NPY_INTP NPY_LONGLONG
-        #define NPY_UINTP NPY_ULONGLONG
-        #define PyIntpArrType_Type PyLongLongArrType_Type
-        #define PyUIntpArrType_Type PyULongLongArrType_Type
-        #define NPY_MAX_INTP NPY_MAX_LONGLONG
-        #define NPY_MIN_INTP NPY_MIN_LONGLONG
-        #define NPY_MAX_UINTP NPY_MAX_ULONGLONG
-        #define NPY_INTP_FMT "lld"
-#endif
-
-/*
- * We can only use C99 formats for npy_int_p if it is the same as
- * intp_t, hence the condition on HAVE_UNITPTR_T
- */
-#if (NPY_USE_C99_FORMATS) == 1 \
-        && (defined HAVE_UINTPTR_T) \
-        && (defined HAVE_INTTYPES_H)
-        #include <inttypes.h>
-        #undef NPY_INTP_FMT
-        #define NPY_INTP_FMT PRIdPTR
-#endif
-
-
-/*
- * Some platforms don't define bool, long long, or long double.
- * Handle that here.
- */
 #define NPY_BYTE_FMT "hhd"
 #define NPY_UBYTE_FMT "hhu"
 #define NPY_SHORT_FMT "hd"
@@ -286,10 +31,8 @@ typedef Py_uintptr_t npy_uintp;
 #define NPY_UINT_FMT "u"
 #define NPY_LONG_FMT "ld"
 #define NPY_ULONG_FMT "lu"
-#define NPY_HALF_FMT "g"
 #define NPY_FLOAT_FMT "g"
 #define NPY_DOUBLE_FMT "g"
-
 
 #ifdef PY_LONG_LONG
 typedef PY_LONG_LONG npy_longlong;
@@ -297,14 +40,17 @@ typedef unsigned PY_LONG_LONG npy_ulonglong;
 #  ifdef _MSC_VER
 #    define NPY_LONGLONG_FMT         "I64d"
 #    define NPY_ULONGLONG_FMT        "I64u"
-#  else
-#    define NPY_LONGLONG_FMT         "lld"
-#    define NPY_ULONGLONG_FMT        "llu"
-#  endif
-#  ifdef _MSC_VER
 #    define NPY_LONGLONG_SUFFIX(x)   (x##i64)
 #    define NPY_ULONGLONG_SUFFIX(x)  (x##Ui64)
 #  else
+        /* #define LONGLONG_FMT   "lld"      Another possible variant
+           #define ULONGLONG_FMT  "llu"
+
+           #define LONGLONG_FMT   "qd"   -- BSD perhaps?
+           #define ULONGLONG_FMT   "qu"
+        */
+#    define NPY_LONGLONG_FMT         "Ld"
+#    define NPY_ULONGLONG_FMT        "Lu"
 #    define NPY_LONGLONG_SUFFIX(x)   (x##LL)
 #    define NPY_ULONGLONG_SUFFIX(x)  (x##ULL)
 #  endif
@@ -341,29 +87,15 @@ typedef unsigned int npy_uint;
 typedef unsigned long npy_ulong;
 
 /* These are for completeness */
-typedef char npy_char;
+typedef float npy_float;
+typedef double npy_double;
 typedef short npy_short;
 typedef int npy_int;
 typedef long npy_long;
-typedef float npy_float;
-typedef double npy_double;
-
-/*
- * Hash value compatibility.
- * As of Python 3.2 hash values are of type Py_hash_t.
- * Previous versions use C long.
- */
-#if PY_VERSION_HEX < 0x03020000
-typedef long npy_hash_t;
-#define NPY_SIZEOF_HASH_T NPY_SIZEOF_LONG
-#else
-typedef Py_hash_t npy_hash_t;
-#define NPY_SIZEOF_HASH_T NPY_SIZEOF_INTP
-#endif
 
 /*
  * Disabling C99 complex usage: a lot of C code in numpy/scipy rely on being
- * able to do .real/.imag. Will have to convert code first.
+ * able to do .real/.imag. Will have to convert code first. 
  */
 #if 0
 #if defined(NPY_USE_C99_COMPLEX) && defined(NPY_HAVE_COMPLEX_DOUBLE)
@@ -386,22 +118,22 @@ typedef struct {npy_longdouble real, imag;} npy_clongdouble;
 #endif
 #if NPY_SIZEOF_COMPLEX_DOUBLE != 2 * NPY_SIZEOF_DOUBLE
 #error npy_cdouble definition is not compatible with C99 complex definition ! \
-        Please contact NumPy maintainers and give detailed information about your \
-        compiler and platform
+	Please contact Numpy maintainers and give detailed information about your \
+	compiler and platform
 #endif
 typedef struct { double real, imag; } npy_cdouble;
 
 #if NPY_SIZEOF_COMPLEX_FLOAT != 2 * NPY_SIZEOF_FLOAT
 #error npy_cfloat definition is not compatible with C99 complex definition ! \
-        Please contact NumPy maintainers and give detailed information about your \
-        compiler and platform
+	Please contact Numpy maintainers and give detailed information about your \
+	compiler and platform
 #endif
 typedef struct { float real, imag; } npy_cfloat;
 
 #if NPY_SIZEOF_COMPLEX_LONGDOUBLE != 2 * NPY_SIZEOF_LONGDOUBLE
 #error npy_clongdouble definition is not compatible with C99 complex definition ! \
-        Please contact NumPy maintainers and give detailed information about your \
-        compiler and platform
+	Please contact Numpy maintainers and give detailed information about your \
+	compiler and platform
 #endif
 typedef struct { npy_longdouble real, imag; } npy_clongdouble;
 
@@ -463,21 +195,18 @@ typedef struct { npy_longdouble real, imag; } npy_clongdouble;
 #define NPY_MIN_LONG  LONG_MIN
 #define NPY_MAX_ULONG  ULONG_MAX
 
-#define NPY_BITSOF_BOOL (sizeof(npy_bool) * CHAR_BIT)
+#define NPY_SIZEOF_DATETIME 8
+#define NPY_SIZEOF_TIMEDELTA 8
+
+#define NPY_BITSOF_BOOL (sizeof(npy_bool)*CHAR_BIT)
 #define NPY_BITSOF_CHAR CHAR_BIT
-#define NPY_BITSOF_BYTE (NPY_SIZEOF_BYTE * CHAR_BIT)
 #define NPY_BITSOF_SHORT (NPY_SIZEOF_SHORT * CHAR_BIT)
 #define NPY_BITSOF_INT (NPY_SIZEOF_INT * CHAR_BIT)
 #define NPY_BITSOF_LONG (NPY_SIZEOF_LONG * CHAR_BIT)
 #define NPY_BITSOF_LONGLONG (NPY_SIZEOF_LONGLONG * CHAR_BIT)
-#define NPY_BITSOF_INTP (NPY_SIZEOF_INTP * CHAR_BIT)
-#define NPY_BITSOF_HALF (NPY_SIZEOF_HALF * CHAR_BIT)
 #define NPY_BITSOF_FLOAT (NPY_SIZEOF_FLOAT * CHAR_BIT)
 #define NPY_BITSOF_DOUBLE (NPY_SIZEOF_DOUBLE * CHAR_BIT)
 #define NPY_BITSOF_LONGDOUBLE (NPY_SIZEOF_LONGDOUBLE * CHAR_BIT)
-#define NPY_BITSOF_CFLOAT (NPY_SIZEOF_CFLOAT * CHAR_BIT)
-#define NPY_BITSOF_CDOUBLE (NPY_SIZEOF_CDOUBLE * CHAR_BIT)
-#define NPY_BITSOF_CLONGDOUBLE (NPY_SIZEOF_CLONGDOUBLE * CHAR_BIT)
 #define NPY_BITSOF_DATETIME (NPY_SIZEOF_DATETIME * CHAR_BIT)
 #define NPY_BITSOF_TIMEDELTA (NPY_SIZEOF_TIMEDELTA * CHAR_BIT)
 
@@ -853,7 +582,20 @@ typedef struct { npy_longdouble real, imag; } npy_clongdouble;
 
 
 
-#if NPY_BITSOF_DOUBLE == 32
+#if NPY_BITSOF_DOUBLE == 16
+#ifndef NPY_FLOAT16
+#define NPY_FLOAT16 NPY_DOUBLE
+#define NPY_COMPLEX32 NPY_CDOUBLE
+        typedef  double npy_float16;
+        typedef npy_cdouble npy_complex32;
+#    define PyFloat16ScalarObject PyDoubleScalarObject
+#    define PyComplex32ScalarObject PyCDoubleScalarObject
+#    define PyFloat16ArrType_Type PyDoubleArrType_Type
+#    define PyComplex32ArrType_Type PyCDoubleArrType_Type
+#define NPY_FLOAT16_FMT NPY_DOUBLE_FMT
+#define NPY_COMPLEX32_FMT NPY_CDOUBLE_FMT
+#endif
+#elif NPY_BITSOF_DOUBLE == 32
 #ifndef NPY_FLOAT32
 #define NPY_FLOAT32 NPY_DOUBLE
 #define NPY_COMPLEX64 NPY_CDOUBLE
@@ -922,7 +664,20 @@ typedef struct { npy_longdouble real, imag; } npy_clongdouble;
 
 
 
-#if NPY_BITSOF_FLOAT == 32
+#if NPY_BITSOF_FLOAT == 16
+#ifndef NPY_FLOAT16
+#define NPY_FLOAT16 NPY_FLOAT
+#define NPY_COMPLEX32 NPY_CFLOAT
+        typedef float npy_float16;
+        typedef npy_cfloat npy_complex32;
+#    define PyFloat16ScalarObject PyFloatScalarObject
+#    define PyComplex32ScalarObject PyCFloatScalarObject
+#    define PyFloat16ArrType_Type PyFloatArrType_Type
+#    define PyComplex32ArrType_Type PyCFloatArrType_Type
+#define NPY_FLOAT16_FMT NPY_FLOAT_FMT
+#define NPY_COMPLEX32_FMT NPY_CFLOAT_FMT
+#endif
+#elif NPY_BITSOF_FLOAT == 32
 #ifndef NPY_FLOAT32
 #define NPY_FLOAT32 NPY_FLOAT
 #define NPY_COMPLEX64 NPY_CFLOAT
@@ -989,12 +744,21 @@ typedef struct { npy_longdouble real, imag; } npy_clongdouble;
 #endif
 #endif
 
-/* half/float16 isn't a floating-point type in C */
-#define NPY_FLOAT16 NPY_HALF
-typedef npy_uint16 npy_half;
-typedef npy_half npy_float16;
 
-#if NPY_BITSOF_LONGDOUBLE == 32
+#if NPY_BITSOF_LONGDOUBLE == 16
+#ifndef NPY_FLOAT16
+#define NPY_FLOAT16 NPY_LONGDOUBLE
+#define NPY_COMPLEX32 NPY_CLONGDOUBLE
+        typedef npy_longdouble npy_float16;
+        typedef npy_clongdouble npy_complex32;
+#    define PyFloat16ScalarObject PyLongDoubleScalarObject
+#    define PyComplex32ScalarObject PyCLongDoubleScalarObject
+#    define PyFloat16ArrType_Type PyLongDoubleArrType_Type
+#    define PyComplex32ArrType_Type PyCLongDoubleArrType_Type
+#define NPY_FLOAT16_FMT NPY_LONGDOUBLE_FMT
+#define NPY_COMPLEX32_FMT NPY_CLONGDOUBLE_FMT
+#endif
+#elif NPY_BITSOF_LONGDOUBLE == 32
 #ifndef NPY_FLOAT32
 #define NPY_FLOAT32 NPY_LONGDOUBLE
 #define NPY_COMPLEX64 NPY_CLONGDOUBLE
@@ -1081,3 +845,4 @@ typedef npy_int64 npy_datetime;
 /* End of typedefs for numarray style bit-width names */
 
 #endif
+

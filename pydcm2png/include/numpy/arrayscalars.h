@@ -71,12 +71,6 @@ typedef struct {
 
 typedef struct {
         PyObject_HEAD
-        npy_half obval;
-} PyHalfScalarObject;
-
-
-typedef struct {
-        PyObject_HEAD
         float obval;
 } PyFloatScalarObject;
 
@@ -115,19 +109,6 @@ typedef struct {
         PyObject_HEAD
         PyObject * obval;
 } PyObjectScalarObject;
-
-typedef struct {
-        PyObject_HEAD
-        npy_datetime obval;
-        PyArray_DatetimeMetaData obmeta;
-} PyDatetimeScalarObject;
-
-typedef struct {
-        PyObject_HEAD
-        npy_timedelta obval;
-        PyArray_DatetimeMetaData obmeta;
-} PyTimedeltaScalarObject;
-
 
 typedef struct {
         PyObject_HEAD
