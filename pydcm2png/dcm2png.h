@@ -58,15 +58,14 @@ class DCMOP{
 		DCMOP();
 		DCMOP(const char *file_name);
 		~DCMOP();
-	void to_DicomImage();
-	void decode_dcm(E_TransferSyntax xfer);
-	bool get_and_display_minmax();
-	bool apply_window(int opt_windowType = 0,OFCmdUnsignedInt opt_windowParameter = 1, OFCmdFloat opt_windowCenter = 0.0,OFCmdFloat opt_windowWidth = 0.0);
-	void dump_voi_LUT();
-	bool open(const char * file_name);
-	int get_window_type(unsigned long window_cnt,unsigned long voi_lut_cnt,bool no_window=false);
-
-
+		void to_DicomImage();
+		void decode_dcm(E_TransferSyntax xfer);
+		bool get_and_display_minmax();
+		bool apply_window(int opt_windowType = 0,OFCmdUnsignedInt opt_windowParameter = 1,\
+			       	OFCmdFloat opt_windowCenter = 0.0,OFCmdFloat opt_windowWidth = 0.0);
+		void dump_voi_LUT();
+		bool open(const char * file_name);
+		int get_window_type(unsigned long window_cnt,unsigned long voi_lut_cnt,bool no_window=false);
 		bool apply_normal_window();
 		void * get_pixel_data();
 		unsigned long width;
@@ -74,19 +73,18 @@ class DCMOP{
 		unsigned short channels_num;
 		bool isMonochrome();
 	private:
-			DcmDataset * _dataset;
-			DcmMetaInfo *_meta_info;
-			DcmFileFormat * _file_format;
-			DicomImage *di;
-			E_TransferSyntax xfer;
-			OFBool           opt_ignoreVoiLutDepth ;
-			OFCmdUnsignedInt    opt_frame;
-			OFCmdUnsignedInt    opt_frameCount;
-			char * _current_dcm_name;
-			bool aleady_open_flag;
-			double minVal ;
-			double maxVal ;
-	
+		DcmDataset * _dataset;
+		DcmMetaInfo *_meta_info;
+		DcmFileFormat * _file_format;
+		DicomImage *di;
+		E_TransferSyntax xfer;
+		OFBool           opt_ignoreVoiLutDepth ;
+		OFCmdUnsignedInt    opt_frame;
+		OFCmdUnsignedInt    opt_frameCount;
+		char * _current_dcm_name;
+		bool aleady_open_flag;
+		double minVal ;
+		double maxVal ;
 };
 
 extern void pixel_data(const char * dcm_file,unsigned short* data,int n);

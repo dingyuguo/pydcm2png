@@ -3,6 +3,21 @@ import numpy as np
 import os
 import glob
 
+CLASSIFIERS = """\
+Development Status :: 4 - Beta
+Intended Audience :: Science/Research
+Intended Audience :: Developers
+License :: OSI Approved
+Programming Language :: C++
+Programming Language :: Python
+Topic :: Software Development
+Topic :: Scientific/Engineering
+Operating System :: Microsoft :: Windows
+Operating System :: POSIX
+Operating System :: Unix
+Operating System :: MacOS
+"""
+
 src_cc = glob.glob('pydcm2png/dcm*/*/*.c*')
 src_cc.append('pydcm2png/dcm2png.i')
 src_cc.append('pydcm2png/dcm2png.cpp')
@@ -48,17 +63,14 @@ data_file = include_files.append('_dcm2png.so')
 data_file = include_files.append('dicom.dic')
 setup(
     name="pydcm2png",
-    version="0.0.3.2",
+    version="0.0.4.0",
     author="dingyuguo",
     author_email="dyg1993@foxmail.com",
-    description="Convert DICOM file to PNG file",
+    description="Get Device Independent Pixel Data From DICOM File",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/pypa/sampleproject",
-    classifiers=[
-        "Programming Language :: Python :: 2",
-        "License :: OSI Approved :: MIT License",
-    ],
+    classifiers=filter(None, CLASSIFIERS.split('\n')),
     ext_modules=[_dcm2png],
     packages=['pydcm2png'],
     package_dir={'pydcm2png':'pydcm2png/'},

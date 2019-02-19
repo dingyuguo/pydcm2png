@@ -6,7 +6,7 @@ if os.path.isfile(p):
     p=''
 os.environ['DCMDICTPATH']=os.path.join(p,'dicom.dic')
 import dcm2png
-def to_png(dcm_file):
+def get_pixel_data(dcm_file):
     width = dcm2png.get_width(dcm_file)
     height = dcm2png.get_height(dcm_file)
     dcm_vector = dcm2png.pixel_data(dcm_file,width*height)
