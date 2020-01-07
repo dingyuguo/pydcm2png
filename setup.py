@@ -42,33 +42,27 @@ _dcm2png = Extension(name='pydcm2png/_dcm2png',
                                'pydcm2png/dcmjpeg/libijg8/',
                                'pydcm2png/dcmjpeg/libijg12/',
                                'pydcm2png/dcmjpeg/libijg16/',
-                               '/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.14.sdk/usr/include',
-                               '/usr/local/Cellar/gcc/7.3.0_1/include/c++/7.3.0/x86_64-apple-darwin17.3.0/',
-                               '/usr/local/Cellar/gcc/7.3.0_1/include/c++/7.3.0/',
-                               '/usr/local/include/',
-                               '/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.14.sdk/usr/include/'],
+                               '/usr/local/include/'],
                  libraries=['z'],
                  library_dirs=[
-                               '/usr/local/Cellar/gcc/7.3.0_1/lib/gcc/7',
                                '/usr/local/lib/python3.6/site-packages/numpy/lib/',
                                '/usr/local/lib',
-                               '/usr/local/opt/',
-                        '/usr/lib/x86_64-linux-gnu/','/home/imgserver/anaconda3/lib/'],
+                               '/usr/lib/x86_64-linux-gnu/'],
                  extra_compile_args=[  # The g++ (4.8) in Travis needs this
-        '-shared','-std=c++11','-g'],
+                               '-shared','-std=c++11','-g'],
                  )
 
 data_file = include_files.append('_dcm2png.so')
 data_file = include_files.append('dicom.dic')
 setup(
     name="pydcm2png",
-    version="0.1.0.0",
+    version="0.1.0.1",
     author="dingyuguo",
     author_email="dyg1993@foxmail.com",
     description="Get Device Independent Pixel Data From DICOM File",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/pypa/sampleproject",
+    url="https://github.com",
     classifiers=filter(None, CLASSIFIERS.split('\n')),
     ext_modules=[_dcm2png],
     packages=['pydcm2png'],
